@@ -1,0 +1,126 @@
+{
+  "rock": [
+    "classic rock", "rock", "hard rock", "psychedelic", "garage rock",
+    "indie rock", "rock n roll", "noise rock", "surf rock", "southern rock", 
+    "prog rock", "math rock", "grunge", "blues rock", "emo", "post-rock", 
+    "rock opera",  "alt rock", "alternative rock", "J-rock",
+    "garage", "soft rock", "psychedelic rock", "melodic rock", 
+    "chillwave", "stomp and holler", "sludge", "britpop", "space rock", 
+    "gothic rock", "glam rock", "crust punk", "stoner rock", "Progressive rock", "Progressive"
+  ],
+  "pop": [
+    "pop", "dance pop", "pop rock", "art pop", "bedroom pop", "dream pop",
+    "sunshine pop", "bubblegum bass", "teen pop", "psychedelic pop", "hyperpop"
+  ],
+  "hip hop / rap": [
+    "hip hop", "hip-hop", "hiphop", "rap", "underground hip-hop", "trap", "cloud rap", "french rap", "ann arbor",
+    "instrumental hip-hop", "instrumental hip hop", "rapcore", "drill", "emo rap", "lofi hip hop", "detroit",
+    "gangsta rap", "dirty south", "abstract hip-hop", "aesthetic rap", "uk hip hop", "Doomtree",
+    "moroccan rap", "white rap", "country rap", "scam rap", "southern hip hop", "southern rap",
+    "detroit rap", "florida rap", "bronx drill", "hardcore hip hop", "hip hop latino", "trip-hop", "boom bap", "conscious hip hop", "old school hip hop", "new school hip hop",
+    "east coast hip hop", "west coast hip hop", "midwest hip hop", "Chill-Hop", "jazz rap", "country rap",
+    "latin trap", "latin rap", "mumble rap", "lo-fi hop hop", "lo-fi hip hop", "chillhop", "chill rap", "chill beats"
+  ],
+  "electronic": [
+    "electronic", "electronica", "edm", "house", "electro house", "deep house", "moombahton", "chillsynth", "Hard Trance", "AOR",
+    "techno", "trance", "dance", "beats", "idm", "dubstep", "dub techno", "breakbeat", "beat", "catwave",
+    "future garage", "minimal", "minimalism", "downtempo", "lofi", "lo-fi", "chillhop", "chill-out", 
+    "chillout", "future bass", "electronic superhighway", "lo-fi beat", "lofi house", "8-bit", "grime",
+    "hard techno", "drum and bass", "dnb", "drum n bass", "hardstyle", "happy hardcore", "industrial", "industrial metal",
+    "rave", "juke", "electro", "electroclash", "eurobeat", "eurodance", "psytrance", "psychedelic trance", "new rave",
+    "acid house", "acid jazz", "synth punk", "chill", "chillwave", "synthwave", "space disco", "future funk", "nu jazz", "synthpop", "electropop", "electronic pop",
+    "vaporwave", "witch house", "downtempo", "digital hardcore", "glitch", "glitch-hop", "chill beats", "power ambient", "darkwave", "chiptune", "synthwave", "retrowave", "dreamwave"
+  ],
+  "punk": [
+    "punk", "hardcore punk", "post-punk", "pop punk", "punk rock", "anarcho-punk", "crack rock steady",
+    "crust punk", "oi!", "street punk", "ska punk", "emo", "emo pop", "screamo", "hardcore", "garage punk", 
+    "grindcore", "thrashcore", "crossover thrash", "melodic hardcore", "skate punk", "celtic punk",
+    "horror punk", "folk punk", "riot grrrl", "queercore", "oi", "psychobilly", "noise", "punkabilly"
+  ],
+  "indie / alternative": [
+    "indie", "indie rock", "indie pop", "indie folk", "anti-folk", "twee",
+    "alt-indie", "indiepostprog", "new wave", "alternative", "alternative rock", "alt soul", "shoegaze"
+  ],
+  "metal": [
+    "metal", "heavy metal", "death metal", "black metal", "doom metal", "thrash metal", "cringe",
+    "folk metal", "metalcore", "progressive metal", "power metal", "industrial metal", "Technical Deathcore",
+    "symhponic metal", "melodic death metal", "brutal death metal", "depressive black metal", "atmospheric black metal",
+    "deathcore", "technical death metal", "sludge", "cyber metal", "nu metal", "gothic metal", "mathcore", "math metal", "stoner metal", "trap metal", "progressive metalcore", "extreme ultra brutal gore bloddy death metal from hell",
+    "grindcore", "post-metal", "post-hardcore", "metallic hardcore", "metallic punk", "metallic rock", "metallic post-hardcore",
+    "metallic noise", "metallic shoegaze", "metallic post-rock", "pisscore", "symphonic metal"
+  ],
+  "jazz": [
+    "jazz", "jazz fusion", "vocal jazz", "smooth jazz", "soul jazz", "contemporary jazz", 
+    "acid jazz", "nu-jazz", "nu jazz", "jazz hop", "south african jazz", "swing", "lounge"
+  ],
+  "classical": [
+    "classical", "contemporary classical", "modern", "baroque", "neoclassical", 
+    "klassiek", "piano", "violin", "cello", "classical guitar", "orchestra", "orchestral", 
+    "minimalist", "chamber music", "early music", "renaissance", "composer", "composers", "medieval", "romantic",
+    "opera", "symphony", "klassieke musiek", "utrecht"
+  ],
+  "soul / funk / r&b": [
+    "soul", "neo-soul", "rnb", "r&b", "funk", "northern soul", "motown", "alt soul", "alternative rnb",
+    "p-funk", "groove metal", "rhythm and blues", "funk_add_to_lidarr_batch_16", "funk_add_to_lidarr_batch_13"
+  ],
+  "country": [
+    "country", "alt-country"
+  ],
+  "folk": [
+    "folk", "folk rock", "indie folk", "americana", "singer-songwriter", "acoustic",  "neofolk", "folktronica",
+    "traditional folk", "british folk", "irish folk", "scottish folk", "celtic folk",  "italian folk", "celtic",  
+    "nordic folk", "world folk", "bluegrass", "drone folk", "traditional", "irish country", "fiddle", "bagpipes"
+  ],
+  "reggae": [
+    "reggae", "reggae metal", "dub", "dub reggae", "dancehall", "ska", "calypso", "roots reggae", "rocksteady", "jamaica"
+  ],
+  "latin": [
+    "latin", "latin pop", "cumbia", "mariachi", "ranchera", "bolero", "boleros", "salsa", "bachata", "bossa nova", "corridos",
+    "corridos tumbados", "urbano", "reggaeton", "puerto rico", "dominican republic", "colombia", "argentina", "chile", "mierda", "mexican",
+    "latino", "latina", "latinx", "latin rock", "rock chileno", "racista",
+    "mexico", "venezuelan", "brazilian", "brazil", "panama", "spanish", "flamenco", "cubano", "spain", "bachata", "romanticas", "bolivia", "la plata"
+  ],
+  "african": [
+    "afrobeat", "afrobeats", "naija", "nigeria", "nigerian", "ghana", "south africa", "south african", "gambia", "kenyan", "uganda",
+    "burkina faso", "ivory coast", "cote d'ivoire", "cameroon", "tanzania", "zimbabwe", "malawi", "senegal", "morocco", "africa",
+    "drc", "dr congo", "guinea", "benin", "angola", "ethio-jazz", "ethiopia", "ivory coast", "cape verde", "algeria", "algerian",
+    "libya", "libyan", "togo", "somaliland", "sudan", "congo-brazzaville", "nordic", "egypt", "soukous", "highlife", "gnawa", "amapiano"
+  ],
+  "asian": [
+    "j-pop", "jrock", "japanese", "japanese rock", "anime", "city pop", "k-pop", "korean", "korea", "taiwan", "thai", "thailand",
+    "malay", "malaysia", "opm", "philippines", "indonesia", "indonesian", "bengali", "india", "indian", "bollywood",
+    "bhangra", "telugu", "tamil", "vietnamese", "jungle sky", "chinese", "china", "mongolian", "mongolia", "israel", "hebrew",
+    "palestinian", "armenian", "kazakhstan", "throat-singing", "japan", "Punjabi", "throat singing", "shamisen"
+  ],
+  "european": [
+    "icelandic", "british", "united kingdom", "nordic", "scandinavian", "swedish", "sweden", "german", "germany",
+    "polish", "france", "french", "finnish", "finland", "danish", "denmark", "dutch", "netherlands", "belgian", "belgium",
+    "italian", "italy", "russian", "russia", "uk", "ukraina", "ukraine", "czech", "austrian", "austria", "hungarian", "norwegian",
+    "norway", "slovak", "slovakia", "croatian", "ireland", "irish", "u.k.", "scotland", "scottish", "greece", "greek",
+    "switzerland", "swiss", "luxembourg", "albania", "ye-ye"
+  ],
+  "soundtrack": [
+    "soundtrack", "video game music", "game soundtrack", "trailer music", "movie soundtrack",
+    "broadway", "musical", "veronica mars", "disney", "orchestral", "game music", "hamilton", 
+    "john williams", "epic trailer music", "mormon", "peter"
+  ],
+  "ambient": [
+    "ambient", "dark ambient", "power ambient", "ambient pop", "ambient techno", "downtempo", "chill", "drone", "drone folk"
+  ],
+  "children": [
+    "kids", "children", "childrens", "for kids", "cartoon"
+  ],
+  "comedy / spoken": [
+    "comedy", "stand-up", "unfunny", "spoken word", "podcast", "feminine cavern of love"
+  ],
+  "experimental / avant-garde": [
+    "experimental", "avant-garde", "math rock", "math metal", "krautrock", "noise", "lo-fi", "wonky", "idm"
+  ],
+  "christian / gospel": [
+    "christian", "gospel", "worship", "christian rock", "christian metal", "christian rap", "christian hip hop",
+    "praise and worship", "hillsong", "bethel music", "elevation worship", "god"
+  ],
+  "unknown": [
+    "unknown"
+  ]
+}

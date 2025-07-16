@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Spotify Analytics Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/chart.js"></script>
+    <style>
+        .spotify-green { background-color: #1DB954; }
+        .gradient-card { background: linear-gradient(135deg, #1DB954 0%, #1ed760 100%); }
+    </style>
+</head>
+<body class="bg-gray-50 min-h-screen">
+    <!-- Header -->
+    <header class="bg-white shadow-sm border-b border-gray-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-12">
+                <div class="flex items-center">
+                    <div class="h-6 w-6 bg-green-500 rounded-full flex items-center justify-center mr-2">
+                        <svg class="h-4 w-4 text-white" fill="currentColor" viewBox="0 0 20 20">
+                            <path d="M18 3a1 1 0 00-1.196-.98l-10 2A1 1 0 006 5v9.114A4.369 4.369 0 005 14c-1.657 0-3 .895-3 2s1.343 2 3 2 3-.895 3-2V7.82l8-1.6v5.894A4.369 4.369 0 0015 12c-1.657 0-3 .895-3 2s1.343 2 3 2 3-.895 3-2V3z"/>
+                        </svg>
+                    </div>
+                    <h1 class="text-lg font-bold text-gray-900">Spotify Analytics Dashboard</h1>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <button id="toggleView" class="spotify-green text-white px-3 py-1 rounded text-sm hover:bg-green-600 transition-colors">
+                        Show All Time
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+        <!-- Loading State -->
+        <div id="loading" class="text-center py-12">
+            <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-green-500 mx-auto mb-4"></div>
+            <p class="text-gray-600">Loading your music data...</p>
+        </div>
+
+        <!-- Dashboard Content -->
+        <div id="dashboard" class="hidden">
+            <!-- Stats Cards -->
+            <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 mb-6">
+                <div class="gradient-card text-white rounded-lg p-4 shadow-lg">
+                    <div class="text-center">
+                        <h3 class="text-xs font-medium text-white/80">Total Listening Time</h3>
+                        <p id="totalTime" class="text-xl font-bold text-white">--</p>
+                        <p id="timeSubtitle" class="text-xs text-white/70">Past Year</p>
+                    </div>
+                </div>
+                
+                <div class="bg-white rounded-lg p-4 shadow-lg border border-gray-200">
+                    <div class="text-center">
+                        <h3 class="text-xs font-medium text-gray-500">Artists</h3>
+                        <p id="artistCount" class="text-xl font-bold text-gray-900">--</p>
+                        <p class="text-xs text-gray-400">Tracked</p>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-lg p-4 shadow-lg border border-gray-200">
+                    <div class="text-center">
+                        <h3 class="text-xs font-medium text-gray-500">Tracks</h3>
+                        <p id="trackCount" class="text-xl font-bold text-gray-900">--</p>
+                        <p class="text-xs text-gray-400">Analyzed</p>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-lg p-4 shadow-lg border border-gray-200">
+                    <div class="text-center">
+                        <h3 class="text-xs font-medium text-gray-500">Genres</h3>
+                        <p id="genreCount" class="text-xl font-bold text-gray-900">--</p>
+                        <p class="text-xs text-gray-400">Discovered</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Charts Grid -->
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 mb-6">
+                <!-- Top Artists Chart -->
+                <div class="bg-white rounded-lg p-4 shadow-lg border border-gray-200">
+                    <h3 id="artistsChartTitle" class="text-sm font-semibold mb-2 text-gray-900">Top Artists (Past Year)</h3>
+                    <div class="h-48">
+                        <canvas id="artistsChart"></canvas>
+                    </div>
+                </div>
+
+                <!-- Genre Chart -->
+                <div class="bg-white rounded-lg p-4 shadow-lg border border-gray-200">
+                    <h3 id="genreChartTitle" class="text-sm font-semibold mb-2 text-gray-900">Genre Distribution (Past Year)</h3>
+                    <div class="h-48">
+                        <canvas id="genreChart"></canvas>
+                    </div>
+                </div>
+
+                <!-- Top Tracks List -->
+                <div class="bg-white rounded-lg p-4 shadow-lg border border-gray-200">
+                    <h3 id="tracksTableTitle" class="text-sm font-semibold mb-2 text-gray-900">Top Tracks (Past Year)</h3>
+                    <div class="overflow-y-auto h-48">
+                        <div id="tracksListContainer">
+                            <!-- Track list will be populated by JavaScript -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Footer -->
+            <footer class="text-center text-gray-500 text-xs mt-4">
+                <p>🎵 Spotify Analytics Dashboard - Built with love for music data</p>
+            </footer>
+        </div>
+    </main>
+
+    <script>
+        // Global variables
+        let currentData = null;
+        let showExtended = false;
+        let artistsChart = null;
+        let genreChart = null;
+
+        // Initialize dashboard
+        async function initDashboard() {
+            try {
+                await loadData();
+                
+                if (currentData) {
+                    updateDashboard();
+                    document.getElementById('loading').classList.add('hidden');
+                    document.getElementById('dashboard').classList.remove('hidden');
+                } else {
+                    throw new Error('No data could be loaded');
+                }
+            } catch (error) {
+                console.error('Error initializing dashboard:', error);
+                document.getElementById('loading').innerHTML = `
+                    <div class="text-center">
+                        <p class="text-red-500 mb-4">Using sample data for demonstration</p>
+                        <p class="text-gray-600 text-sm">Replace with your actual Spotify data files</p>
+                    </div>
+                `;
+                
+                // Load sample data
+                currentData = getSampleData();
+                updateDashboard();
+                document.getElementById('loading').classList.add('hidden');
+                document.getElementById('dashboard').classList.remove('hidden');
+            }
+        }
+
+        // Load data from JSON files
+        async function loadData() {
+            try {
+                // Try to load actual data files
+                const [yearData0, yearData1, genreYear, genreAll] = await Promise.all([
+                    loadJSON('StreamingHistory_music_0.json'),
+                    loadJSON('StreamingHistory_music_1.json'),
+                    loadJSON('playtime_by_genre_year.json'),
+                    loadJSON('playtime_by_genre_all.json')
+                ]);
+
+                // Combine year data
+                const yearData = [...yearData0, ...yearData1];
+
+                // Process the data
+                currentData = processData(yearData, genreYear, genreAll);
+            } catch (error) {
+                console.error('Error loading data:', error);
+                throw error;
+            }
+        }
+
+        // Load JSON file
+        async function loadJSON(filename) {
+            try {
+                const response = await fetch(filename);
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                return await response.json();
+            } catch (error) {
+                console.error(`Error loading ${filename}:`, error);
+                throw error;
+            }
+        }
+
+        // Get sample data for demonstration
+        function getSampleData() {
+            return {
+                totalHours: 186.68,
+                topArtists: [
+                    { artist: 'Sarah Schachner', minutes: 484 },
+                    { artist: 'John Williams', minutes: 254 },
+                    { artist: 'Sufjan Stevens', minutes: 242 },
+                    { artist: 'Bad Bunny', minutes: 237 },
+                    { artist: 'Kyle Dixon & Michael Stein', minutes: 167 },
+                    { artist: 'Hans Zimmer', minutes: 145 }
+                ],
+                topTracks: [
+                    { artist: 'Tom Morello', track: 'Soldier In The Army of Love', minutes: 2.1 },
+                    { artist: 'Rvssian', track: 'Santa', minutes: 0.8 },
+                    { artist: 'Brian Tyler', track: 'Marvel Studios Fanfare', minutes: 0.7 },
+                    { artist: 'Sarah Schachner', track: 'Main Theme', minutes: 3.2 },
+                    { artist: 'John Williams', track: 'Star Wars Main Theme', minutes: 4.1 },
+                    { artist: 'Sufjan Stevens', track: 'Mystery of Love', minutes: 2.8 },
+                    { artist: 'Bad Bunny', track: 'Tití Me Preguntó', minutes: 3.5 },
+                    { artist: 'Kyle Dixon & Michael Stein', track: 'Stranger Things Theme', minutes: 1.9 },
+                    { artist: 'Hans Zimmer', track: 'Time', minutes: 4.3 },
+                    { artist: 'The Weeknd', track: 'Blinding Lights', minutes: 2.7 }
+                ],
+                genreYear: {
+                    'Soundtrack': 3737.74,
+                    'Hip-Hop': 1349.85,
+                    'synthwave': 981.71,
+                    'electronic': 978.92,
+                    'Unknown': 713.02,
+                    'Pop': 456.23
+                },
+                genreAll: {
+                    'Soundtrack': 5837.74,
+                    'Hip-Hop': 2349.85,
+                    'synthwave': 1881.71,
+                    'electronic': 1678.92,
+                    'Unknown': 1213.02,
+                    'Pop': 856.23
+                }
+            };
+        }
+
+        // Process raw data into dashboard format
+        function processData(yearData, genreYear, genreAll) {
+            if (!Array.isArray(yearData) || yearData.length === 0) {
+                throw new Error('No valid year data found');
+            }
+
+            // Calculate total listening time
+            const totalMs = yearData.reduce((sum, entry) => sum + (entry.msPlayed || 0), 0);
+            const totalHours = totalMs / (1000 * 60 * 60);
+
+            // Calculate top artists
+            const artistPlaytime = {};
+            yearData.forEach(entry => {
+                if (entry.artistName) {
+                    artistPlaytime[entry.artistName] = (artistPlaytime[entry.artistName] || 0) + (entry.msPlayed || 0);
+                }
+            });
+
+            const topArtists = Object.entries(artistPlaytime)
+                .sort(([,a], [,b]) => b - a)
+                .slice(0, 50)
+                .map(([artist, ms]) => ({ artist, minutes: ms / (1000 * 60) }));
+
+            // Calculate top tracks
+            const trackPlaytime = {};
+            yearData.forEach(entry => {
+                if (entry.artistName && entry.trackName) {
+                    const key = `${entry.artistName}|||${entry.trackName}`;
+                    trackPlaytime[key] = (trackPlaytime[key] || 0) + (entry.msPlayed || 0);
+                }
+            });
+
+            const topTracks = Object.entries(trackPlaytime)
+                .sort(([,a], [,b]) => b - a)
+                .slice(0, 50)
+                .map(([key, ms]) => {
+                    const [artist, track] = key.split('|||');
+                    return { artist, track, minutes: ms / (1000 * 60) };
+                });
+
+            return {
+                totalHours,
+                topArtists,
+                topTracks,
+                genreYear: genreYear || {},
+                genreAll: genreAll || {}
+            };
+        }
+
+        // Update dashboard display
+        function updateDashboard() {
+            if (!currentData) return;
+
+            // Update stats cards
+            const hours = currentData.totalHours;
+            const days = Math.floor(hours / 24);
+            const remainingHours = Math.floor(hours % 24);
+            const timeStr = days > 0 ? `${days}d ${remainingHours}h` : `${remainingHours}h`;
+            
+            document.getElementById('totalTime').textContent = timeStr;
+            document.getElementById('timeSubtitle').textContent = showExtended ? 'Since 2015' : 'Past Year';
+            document.getElementById('artistCount').textContent = currentData.topArtists.length;
+            document.getElementById('trackCount').textContent = currentData.topTracks.length;
+            
+            const genreData = showExtended ? currentData.genreAll : currentData.genreYear;
+            document.getElementById('genreCount').textContent = Object.keys(genreData).length;
+
+            // Update chart titles
+            const suffix = showExtended ? ' (All Time)' : ' (Past Year)';
+            document.getElementById('artistsChartTitle').textContent = `Top Artists${suffix}`;
+            document.getElementById('genreChartTitle').textContent = `Genre Distribution${suffix}`;
+            document.getElementById('tracksTableTitle').textContent = `Top Tracks${suffix}`;
+
+            // Update charts
+            updateArtistsChart();
+            updateGenreChart();
+            updateTracksTable();
+        }
+
+        // Update artists chart
+        function updateArtistsChart() {
+            const ctx = document.getElementById('artistsChart').getContext('2d');
+            
+            if (artistsChart) {
+                artistsChart.destroy();
+            }
+
+            const data = currentData.topArtists.slice(0, 6);
+            
+            artistsChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: data.map(item => item.artist.length > 12 ? item.artist.substring(0, 12) + '...' : item.artist),
+                    datasets: [{
+                        label: 'Minutes',
+                        data: data.map(item => Math.round(item.minutes)),
+                        backgroundColor: '#1DB954',
+                        borderRadius: 4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            grid: { display: false },
+                            ticks: { font: { size: 10 } }
+                        },
+                        x: {
+                            grid: { display: false },
+                            ticks: { 
+                                font: { size: 9 },
+                                maxRotation: 45
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            callbacks: {
+                                title: function(context) {
+                                    return data[context[0].dataIndex].artist;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        // Update genre chart
+        function updateGenreChart() {
+            const ctx = document.getElementById('genreChart').getContext('2d');
+            
+            if (genreChart) {
+                genreChart.destroy();
+            }
+
+            const genreData = showExtended ? currentData.genreAll : currentData.genreYear;
+            const data = Object.entries(genreData)
+                .filter(([_, minutes]) => minutes > 5)
+                .sort(([,a], [,b]) => b - a)
+                .slice(0, 6);
+
+            const colors = [
+                '#1DB954', '#1ed760', '#21e065', '#25e46d', '#29e875', '#2dec7d'
+            ];
+
+            genreChart = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: data.map(([genre]) => genre.length > 10 ? genre.substring(0, 10) + '...' : genre),
+                    datasets: [{
+                        data: data.map(([_, minutes]) => Math.round(minutes)),
+                        backgroundColor: colors,
+                        borderWidth: 1,
+                        borderColor: '#fff'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: {
+                                font: { size: 9 },
+                                padding: 10,
+                                usePointStyle: true
+                            }
+                        },
+                        tooltip: {
+                            callbacks: {
+                                title: function(context) {
+                                    return data[context[0].dataIndex][0];
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        // Update tracks table
+        function updateTracksTable() {
+            const container = document.getElementById('tracksListContainer');
+            container.innerHTML = '';
+
+            currentData.topTracks.slice(0, 15).forEach((track, index) => {
+                const item = document.createElement('div');
+                item.className = 'flex items-center justify-between py-1 px-2 text-xs hover:bg-gray-50 border-b border-gray-100';
+                
+                item.innerHTML = `
+                    <div class="flex items-center min-w-0 flex-1">
+                        <span class="text-gray-400 w-6 flex-shrink-0">${index + 1}</span>
+                        <div class="min-w-0 flex-1 ml-2">
+                            <div class="font-medium text-gray-900 truncate" title="${track.track}">${track.track}</div>
+                            <div class="text-gray-500 truncate" title="${track.artist}">${track.artist}</div>
+                        </div>
+                    </div>
+                    <span class="text-gray-600 text-xs flex-shrink-0 ml-2">${Math.round(track.minutes)}m</span>
+                `;
+                
+                container.appendChild(item);
+            });
+        }
+
+        // Toggle view between year and all time
+        function toggleView() {
+            showExtended = !showExtended;
+            document.getElementById('toggleView').textContent = showExtended ? 'Show Year View' : 'Show All Time';
+            updateDashboard();
+        }
+
+        // Event listeners
+        document.getElementById('toggleView').addEventListener('click', toggleView);
+
+        // Initialize dashboard when page loads
+        document.addEventListener('DOMContentLoaded', initDashboard);
+    </script>
+</body>
+</html>

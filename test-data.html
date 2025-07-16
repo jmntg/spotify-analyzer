@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Data Test</title>
+</head>
+<body>
+    <h1>Testing Data Loading</h1>
+    <div id="output"></div>
+    
+    <script>
+        async function testDataLoading() {
+            const output = document.getElementById('output');
+            
+            try {
+                // Test loading the streaming history file
+                const response = await fetch('StreamingHistory_music_0.json');
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                
+                const data = await response.json();
+                output.innerHTML = `
+                    <h2>Success!</h2>
+                    <p>Loaded ${data.length} entries from StreamingHistory_music_0.json</p>
+                    <p>Sample entry:</p>
+                    <pre>${JSON.stringify(data[0], null, 2)}</pre>
+                `;
+            } catch (error) {
+                output.innerHTML = `
+                    <h2>Error:</h2>
+                    <p style="color: red;">${error.message}</p>
+                    <p>Make sure you're running this from a web server (not file://)</p>
+                    <p>Try: python3 -m http.server 8000</p>
+                `;
+            }
+        }
+        
+        testDataLoading();
+    </script>
+</body>
+</html>
